@@ -2,6 +2,7 @@
     <div class="hello">
         <h1> {{msg}} </h1>
         <h2>Essential Links</h2>
+        <button @click="signOut">Sign out</button>
         <button @click="apiPublic">public</button>
         <button @click="apiPrivate">private</button>
     </div>
@@ -13,16 +14,25 @@ export default {
     name: 'HelloWorld',
     data () {
         return {
-            msg: 'Welcome to Your Vue.js App'
+            msg: 'Welcome to Your Vue.js App',
+            name: firebase.auth().currentUser.email
         }
     },
     methods: {
+        signOut: function () {
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem('jwt')
+                this.$router.push('/signin')
+            })
+        },
         apiPublic : async function(){
             let res = await axios.get('http://localhost:8000/public')
             this.msg = res.data
         },
         apiPrivate : async function(){
-            let res = await axios.get('http://localhost:8000/private')
+            let res = await axios.get('http://localhost:8000/private',{
+                headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
+            })
             this.msg = res.data
         }
     }
