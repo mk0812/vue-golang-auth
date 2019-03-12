@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/handlers" //CORSの設定
 	"github.com/gorilla/mux"
 
-	firebase "firebase.google.com/go"
+	firebase "firebase.google.com/go" //GoのFirebase用
 	"google.golang.org/api/option"
 )
 
@@ -23,6 +23,7 @@ func private(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello private!\n"))
 }
 
+//https://cloud.google.com/docs/authentication/productionを参考
 func authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Firebase SDK のセットアップ
